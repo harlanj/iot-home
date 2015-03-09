@@ -1,0 +1,23 @@
+{
+  "name": "SpeechKit",
+  "version": "0.0.1",
+  "description": "Smart Lights wrapper for API calls",
+  "main": "speechKit.js",
+  "scripts": {
+    "start": "DEBUG=speechKit:* runjs speechKit.js"
+  },
+  "keywords": [
+    "nodejs",
+    "hue",
+    "api"
+  ],
+  "author": "Jeremiah Harlan <jeremiah.harlan@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "~1.10.2",
+    "debug": "~2.1.1",
+    "express": "4.2.0",
+    "node-hue-api": "~0.2.7",
+    "restify": "~2.8.5"
+  }
+}
