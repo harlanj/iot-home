@@ -7,16 +7,7 @@ debug('init');
 helpers.isValid = function(context, type) {
   // Going to replace this with sinon stub testing at some point
 
-  if ((typeof context === 'undefined') || context === null) {
-    return false;
-  }
-
-  if (!(thing instanceof type)) {
-    return false;
-  }
-
-  return true;
-
+  return typeof context === type ? true : false;
 };
 
 helpers.sendFailureResponse = function(res, statusCode, error) {
@@ -27,6 +18,7 @@ helpers.sendFailureResponse = function(res, statusCode, error) {
       error: error
     });
   } else {
+    error = !error ? statusCode : error;
     res.send(new restify.BadRequestError({ error: error }));
   }
 };

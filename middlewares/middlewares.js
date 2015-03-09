@@ -6,7 +6,14 @@ Middlewares.init = function(app, host, username) {
     debug('***** ' + req.method, req.url + ' *****');
     next();
   });
+
   Middlewares.hueLights = require('./hueLights').init(app, host, username);
+  Middlewares.misc = require('./misc').init(app);
+
+  app.get('/', function(req, res, next) {
+    res.send('Hello');
+    next();
+  });
 };
 
 module.exports = Middlewares;
