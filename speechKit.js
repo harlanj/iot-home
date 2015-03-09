@@ -9,7 +9,9 @@ var server = restify.createServer({
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
-var middlewares = require('./middlewares/middlewares').init(server, process.config.HOST, process.config.USERNAME);
+
+var hueConnection = !process.config.HUE_BRIDGE_PORT ? process.config.HUE_BRIDGE_HOST : util.format('%s:%s', process.config.HUE_BRIDGE_HOST, process.config.HUE_BRIDGE_PORT);
+var middlewares = require('./middlewares/middlewares').init(server, hueConnection, process.config.HUE_BRIDGE_USERNAME);
 
 debug('init');
 

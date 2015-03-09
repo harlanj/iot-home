@@ -10,11 +10,11 @@ HueController._api    = null;
 
 debug('init');
 
-HueController.init = function (host, username) {
-  debug('Initializing Hue for %s %s', host, username);
+HueController.init = function (host, user) {
+  debug('Initializing Hue for %s %s', host, user);
   var api = this;
   this._hueApi = hue.HueApi;
-  this._api = new api._hueApi(host, username);
+  this._api = new api._hueApi(host, user);
   this._state = hue.lightState;
   return this;
 };
