@@ -65,11 +65,11 @@ HueController.user.deleteUser = function (userId, callback) {
 
 HueController.light.displayConfiguration = function (callback) {
   debug('displayConfiguration');
-  HueController.hue.nupnpSearch(function (err, config) {
+  HueController._api.config(function (err, configuration) {
     if (err) {
       return callback({ error: err });
     }
-    callback(err, config);
+    callback(err, configuration);
   });
 };
 
