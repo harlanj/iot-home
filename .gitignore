@@ -1,0 +1,26 @@
+# Node Modules
+node_modules
+
+# DS Store
+.DS_Store
+
+# License file
+LICENSE-MIT
+
+# Build Folder
+build
+
+# Compiled Views
+src/common/templates/compiled.js
+
+# Todo Files
+*.todo
+
+#SCSS Dump
+dump.rdb
+
+#Webstorm Project
+.idea
+
+#Test navigation file
+list.json
