@@ -2,6 +2,7 @@
   "name": "SpeechKit",
   "version": "0.0.1",
   "description": "Smart Lights wrapper for API calls",
+  "mod-project-name": "iot-home",
   "main": "speechKit.js",
   "scripts": {
     "start": "DEBUG=speechKit:* runjs speechKit.js"
