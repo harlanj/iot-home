@@ -18,8 +18,7 @@ helpers.sendFailureResponse = function(res, statusCode, error) {
       error: error
     });
   } else {
-    error = !error ? statusCode : error;
-    res.send(new restify.BadRequestError({ error: error }));
+    return res.send(new restify.BadRequestError(error));
   }
 };
 

@@ -123,7 +123,7 @@ Hue.on = function(req, res, next) {
   hueLightsController.light.on(req.params.light, function(err, lights) {
     if (err) {
       debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, null, err);
+      return helpers.sendFailureResponse(res, null, err.error.toString());
     }
 
     debug('Light %s turned on', req.params.light);
@@ -145,7 +145,7 @@ Hue.off = function(req, res, next) {
   hueLightsController.light.off(req.params.light, function(err, lights) {
     if (err) {
       debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, null, err);
+      return helpers.sendFailureResponse(res, null, err.error.toString());
     }
 
     debug('Light %s turned off', req.params.light);
