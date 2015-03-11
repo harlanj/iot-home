@@ -157,4 +157,26 @@ Hue.off = function(req, res, next) {
   });
 };
 
+Hue.getState = function (req, res, next) {
+  debug('Get light %s state', req.params.light);
+  if (!req.params.light) {
+    debug('Error: Light not provided');
+    return helpers.sendFailureResponse(res, null, 'Light not provided');
+  }
+
+  hueLightsController.light.getState(req.params.light, function (err, light) {
+    if (err) {
+      debug('Error: %s', err.error.message);
+      return helpers.sendFailureResponse(res, null, err.error.toString());
+    }
+
+    debug('Get light %s state success', req.params.light);
+    return res.send(200, {
+      code: 200,
+      success: true,
+      light: light
+    });
+  });
+};
+
 module.exports = HueLights;

@@ -136,4 +136,16 @@ HueController.light.createLightGroup = function (groupName, lights, callback) {
   }
 };
 
+HueController.light.getState = function (light, callback) {
+  debug('getState');
+  if (HueController.checkInit(callback)) {
+    HueController._api.lightStatus(light, function (err, light) {
+      if (err) {
+        return callback({ error: err });
+      }
+      callback(err, light);
+    });
+  }
+};
+
 module.exports = HueController;
