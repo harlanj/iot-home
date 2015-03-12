@@ -10,19 +10,20 @@ helpers.isValid = function(context, type) {
   return typeof context === type ? true : false;
 };
 
-helpers.sendFailureResponse = function(res, statusCode, error) {
+helpers.sendFailureResponse = function(res, next, statusCode, error) {
   if (typeof statusCode === 'number') {
     res.send(statusCode, {
       code: statusCode,
       success: false,
       error: error
     });
+    next();
   } else {
-    return res.send(new restify.BadRequestError(error));
+    next(new restify.BadRequestError(error));
   }
 };
 
-helpers.sendSuccessResponse = function(res, statusCode, result, next) {
+helpers.sendSuccessResponse = function(res, next, statusCode, result) {
   statusCode = statusCode || 200;
   res.send(statusCode, {
     code: statusCode,
