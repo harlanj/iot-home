@@ -1,4 +1,4 @@
-var debug             = require('debug')('speechKit:controllers:lights');
+var debug             = require('debug')('iot-home:controllers:lights');
 var hue               = require("node-hue-api");
 var HueController     = {};
 HueController.hue     = hue;

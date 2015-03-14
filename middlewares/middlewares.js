@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:middlewares:middlewares');
+var debug = require('debug')('iot-home:middlewares:middlewares');
 var Middlewares = {};
 
 Middlewares.init = function(app, host, username) {

@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:server:misc');
+var debug = require('debug')('iot-home:server:misc');
 var MiscServer = {};
 
 var MiscRoutes = function(server, middleware) {

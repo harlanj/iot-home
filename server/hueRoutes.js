@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:server:hue');
+var debug = require('debug')('iot-home:server:hue');
 var HueServer = {};
 
 var HueRoutes = function(server, middleware) {

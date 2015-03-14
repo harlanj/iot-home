@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:helpers:helpers');
+var debug = require('debug')('iot-home:helpers:helpers');
 var restify = require('restify');
 var helpers = {};
 

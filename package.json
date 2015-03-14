@@ -1,11 +1,11 @@
 {
-  "name": "SpeechKit",
+  "name": "iot-home",
   "version": "0.0.1",
   "description": "Smart Lights wrapper for API calls",
   "mod-project-name": "iot-home",
-  "main": "speechKit.js",
+  "main": "iot-home.js",
   "scripts": {
-    "start": "DEBUG=speechKit:* runjs speechKit.js"
+    "start": "DEBUG=iot-home:* runjs iot-home.js"
   },
   "keywords": [
     "nodejs",
@@ -15,9 +15,7 @@
   "author": "Jeremiah Harlan <jeremiah.harlan@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "body-parser": "~1.10.2",
     "debug": "~2.1.2",
-    "express": "4.2.0",
     "node-hue-api": "~1.0.5",
     "restify": "~2.8.5"
   }

@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:middlewares:misc');
+var debug = require('debug')('iot-home:middlewares:misc');
 var helpers = require('./../helpers/helpers');
 var Miscellaneous = {};
 debug('init');

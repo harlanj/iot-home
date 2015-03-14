@@ -1,4 +1,4 @@
-var debug = require('debug')('speechKit:middlewares:hueLights');
+var debug = require('debug')('iot-home:middlewares:hueLights');
 var hueLightsController = require('./../controllers/hueLights');
 var helpers = require('./../helpers/helpers');
 var HueLights = {};

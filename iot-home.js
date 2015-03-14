@@ -11,7 +11,8 @@ server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
 
-var middlewares = require('./middlewares/middlewares').init(server, process.config.HUE_BRIDGE_HOST, process.config.HUE_BRIDGE_USERNAME);
+// var middlewares = require('./middlewares/middlewares').init(server, process.config.HUE_BRIDGE_HOST, process.config.HUE_BRIDGE_USERNAME);
+require('./middlewares/middlewares').init(server, process.config.HUE_BRIDGE_HOST, process.config.HUE_BRIDGE_USERNAME);
 
 debug('init');
 
