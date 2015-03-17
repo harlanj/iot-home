@@ -31,9 +31,7 @@ HueController.user.findUsers = function (callback) {
   debug('findUsers');
   if (HueController.checkInit(callback)) {
     HueController._api.registeredUsers(function (err, users) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, users);
     });
   }
@@ -43,9 +41,7 @@ HueController.user.newUser = function (hostname, username, description, callback
   debug('newUser');
   if (HueController.checkInit(callback)) {
     HueController.hue.createUser(hostname, username, description, function (err, user) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, user);
     });
   }
@@ -55,9 +51,7 @@ HueController.user.deleteUser = function (userId, callback) {
   debug('deleteUser');
   if (HueController.checkInit(callback)) {
     HueController.hue.unregisterUser(userId, function (err, user) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, user);
     });
   }
@@ -87,9 +81,7 @@ HueController.light.on = function (light, callback) {
   debug('on');
   if (HueController.checkInit(callback)) {
     HueController._api.setLightState(light, HueController._state.create().on(), function (err, lights) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, lights);
     });
   }
@@ -99,9 +91,7 @@ HueController.light.off = function (light, callback) {
   debug('off');
   if (HueController.checkInit(callback)) {
     HueController._api.setLightState(light, HueController._state.create().off(), function (err, lights) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, lights);
     });
   }
@@ -111,9 +101,7 @@ HueController.light.setHue = function (light, brightness, callback) {
   debug('setHue');
   if (HueController.checkInit(callback)) {
     HueController._api.setLightState(light, HueController._state.create().on(), function (err, lights) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, lights);
     });
   }
@@ -124,13 +112,26 @@ HueController.light.randomPattern = function (light, callback) {
   if (HueController.checkInit(callback)) {}
 };
 
+HueController.light.dim = function (light, brightness, callback) {
+  debug('dim');
+  if (HueController.checkInit(callback)) {
+    HueController.light.getState(light, function (err, response) {
+      if (err) return callback({ error: err });
+      brightness = response.state.bri - (brightness || hueDefaults.DEFAULT_DIM);
+      brightness = brightness < hueDefaults.MIN_BRIGHTNESS ? hueDefaults.MIN_BRIGHTNESS : brightness;
+      HueController._api.setLightState(light, { bri: brightness }, function (err, response) {
+        if (err) return callback({ error: err });
+        callback(err, response);
+      });
+    });
+  }
+};
+
 HueController.light.createLightGroup = function (groupName, lights, callback) {
   debug('createLightGroup');
   if (HueController.checkInit(callback)) {
     HueController._api.createGroup(groupName, lights, function (err, groupId){
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, groupId);
     });
   }
@@ -140,12 +141,17 @@ HueController.light.getState = function (light, callback) {
   debug('getState');
   if (HueController.checkInit(callback)) {
     HueController._api.lightStatus(light, function (err, light) {
-      if (err) {
-        return callback({ error: err });
-      }
+      if (err) return callback({ error: err });
       callback(err, light);
     });
   }
+};
+
+var hueDefaults = {
+  DEFAULT_DIM: 25,
+  DEFAULT_BRIGHT: 25,
+  MAX_BRIGHTNESS: 250,
+  MIN_BRIGHTNESS: 10 //go home and check this out
 };
 
 module.exports = HueController;
