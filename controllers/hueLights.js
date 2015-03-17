@@ -100,31 +100,32 @@ HueController.light.off = function (light, callback) {
 HueController.light.setHue = function (light, brightness, callback) {
   debug('setHue');
   if (HueController.checkInit(callback)) {
-    HueController._api.setLightState(light, HueController._state.create().on(), function (err, lights) {
-      if (err) return callback({ error: err });
-      callback(err, lights);
-    });
-  }
-};
-
-HueController.light.randomPattern = function (light, callback) {
-  debug('randomPattern');
-  if (HueController.checkInit(callback)) {}
-};
-
-HueController.light.dim = function (light, brightness, callback) {
-  debug('dim');
-  if (HueController.checkInit(callback)) {
     HueController.light.getState(light, function (err, response) {
-      if (err) return callback({ error: err });
-      brightness = response.state.bri - (brightness || hueDefaults.DEFAULT_DIM);
-      brightness = brightness < hueDefaults.MIN_BRIGHTNESS ? hueDefaults.MIN_BRIGHTNESS : brightness;
-      HueController._api.setLightState(light, { bri: brightness }, function (err, response) {
-        if (err) return callback({ error: err });
-        callback(err, response);
-      });
+      if (err) return callback(err);
+      if (!! response.state.on) {
+        debug('Light %s is currently off', light);
+        HueController.light.on(light, function (err) {
+          if (err) return callback(err);
+          return HueController.light._setHue(light, response.state.bri, brightness, callback);
+        });
+      } else {
+        HueController.light._setHue(light, response.state.bri, brightness, callback);
+      }
     });
   }
+};
+
+HueController.light._setHue = function (light, currentBrightness, brightness, callback) {
+  debug('_setHue');
+  brightness = currentBrightness - (brightness || hueDefaults.DEFAULT_DIM);
+  if (brightness < hueDefaults.MIN_BRIGHTNESS) {
+    debug('Turning off light %s', light);
+    return HueController.light.off(light, callback);
+  }
+  HueController._api.setLightState(light, { bri: brightness }, function (err, response) {
+    if (err) return callback({ error: err });
+    callback(err, response);
+  });
 };
 
 HueController.light.createLightGroup = function (groupName, lights, callback) {

@@ -134,8 +134,7 @@ Hue.on = function(req, res, next) {
     debug('Light %s turned on', req.params.light);
     res.send(200, {
       code: 200,
-      success: true,
-      lights: lights
+      success: true
     });
     next();
   });
@@ -157,8 +156,7 @@ Hue.off = function(req, res, next) {
     debug('Light %s turned off', req.params.light);
     res.send(200, {
       code: 200,
-      success: true,
-      lights: lights
+      success: true
     });
     next();
   });
@@ -187,24 +185,23 @@ Hue.getState = function (req, res, next) {
   });
 };
 
-Hue.dimLight = function (req, res, next) {
-  debug('Dim light %s', req.params.light);
+Hue.setHue = function (req, res, next) {
+  debug('Set hue for light %s', req.params.light);
   if (!req.params.light) {
     debug('Error: Light not provided');
     return helpers.sendFailureResponse(res, next, null, 'Light not provided');
   }
 
-  hueLightsController.light.dim(req.params.light, req.query.brightness, function (err, light) {
+  hueLightsController.light.setHue(req.params.light, req.body.brightness, function (err, light) {
     if (err) {
       debug('Error: %s', err.error.message);
       return helpers.sendFailureResponse(res, next, null, err.error.toString());
     }
 
-    debug('Dim light %s success', req.params.light);
+    debug('Set hue for light %s success', req.params.light);
     res.send(200, {
       code: 200,
-      success: true,
-      light: light
+      success: true
     });
   });
 };

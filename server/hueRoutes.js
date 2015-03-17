@@ -6,7 +6,7 @@ var HueRoutes = function(server, middleware) {
   server.get('/hue/light/:light', middleware.getState);
   server.get('/hue/light/:light/on', middleware.on);
   server.get('/hue/light/:light/off', middleware.off);
-  server.get('/hue/light/:light/dim', middleware.dimLight);
+  server.put('/hue/light/:light/set', middleware.setHue);
   server.get('/hue/users', middleware.getAllUsers);
   server.post('/hue/user', middleware.newUser);
   server.del('/hue/user', middleware.deleteUser);
