@@ -60,9 +60,7 @@ HueController.user.deleteUser = function (userId, callback) {
 HueController.light.displayConfiguration = function (callback) {
   debug('displayConfiguration');
   HueController._api.config(function (err, configuration) {
-    if (err) {
-      return callback({ error: err });
-    }
+    if (err) return callback({ error: err });
     callback(err, configuration);
   });
 };
@@ -70,9 +68,7 @@ HueController.light.displayConfiguration = function (callback) {
 HueController.light.findAllLights = function (callback) {
   debug('findAllLights');
   HueController._api.lights(function(err, lights) {
-    if (err) {
-      return callback({ error: err });
-    }
+    if (err) return callback({ error: err });
     callback(err, lights);
   });
 };
@@ -80,21 +76,39 @@ HueController.light.findAllLights = function (callback) {
 HueController.light.on = function (light, callback) {
   debug('on');
   if (HueController.checkInit(callback)) {
-    HueController._api.setLightState(light, HueController._state.create().on(), function (err, lights) {
-      if (err) return callback({ error: err });
-      callback(err, lights);
+    HueController.light.getState(light, function (err, result) {
+      if (err) return callback(err);
+      HueController.light._on(light, result.state.on, callback);
     });
   }
+};
+
+HueController.light._on = function (light, status, callback) {
+  debug('_on');
+  if (status) return callback({ error: 'Light is already on'});
+  HueController._api.setLightState(light, HueController._state.create().on(), function (err, lights) {
+    if (err) return callback({ error: err });
+    callback(err, lights);
+  });
 };
 
 HueController.light.off = function (light, callback) {
   debug('off');
   if (HueController.checkInit(callback)) {
-    HueController._api.setLightState(light, HueController._state.create().off(), function (err, lights) {
-      if (err) return callback({ error: err });
-      callback(err, lights);
+    HueController.light.getState(light, function (err, result) {
+      if (err) return callback(err);
+      HueController.light._off(light, result.state.on, callback);
     });
   }
+};
+
+HueController.light._off = function (light, status, callback) {
+  debug('_off');
+  if (! status) return callback({ error: 'Light is already off'});
+  HueController._api.setLightState(light, HueController._state.create().off(), function (err, lights) {
+    if (err) return callback({ error: err });
+    callback(err, lights);
+  });
 };
 
 HueController.light.setHue = function (light, brightness, callback) {
