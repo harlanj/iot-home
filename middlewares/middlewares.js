@@ -4,6 +4,7 @@ var Middlewares = {};
 Middlewares.init = function(app, host, username) {
   app.use(function(req, res, next) {
     debug('***** ' + req.method, req.url + ' *****');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     next();
   });
 
