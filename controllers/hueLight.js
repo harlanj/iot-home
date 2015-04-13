@@ -1,8 +1,5 @@
 var debug           = require('debug')('iot-home:controllers:hueLight');
 var hue             = require("node-hue-api");
-var redis           = require('redis');
-var serialize       = require('node-serialize');
-
 var HueController   = {};
 HueController.user  = {};
 HueController.light = {};
