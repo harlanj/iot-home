@@ -7,6 +7,7 @@ var server     = restify.createServer({
   version: require('./package').version
 });
 
+server.use(restify.CORS());
 server.use(restify.acceptParser(server.acceptable));
 server.use(restify.queryParser());
 server.use(restify.bodyParser());
