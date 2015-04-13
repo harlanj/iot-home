@@ -18,6 +18,23 @@ HueLights.init = function(server, host, username) {
   return new Hue(server, host, username);
 };
 
+Hue.findBridge = function(req, res, next) {
+  debug('findBridge');
+  hueLightsController.light.findBridge(function(err, bridges) {
+    if (err) {
+      debug('Error: %s', err.error.message);
+      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+    }
+
+    debug('Find bridges success');
+    res.send(200, {
+      code: 200,
+      success: true,
+      bridges: bridges
+    });
+  });
+};
+
 Hue.newUser = function(req, res, next) {
   debug('Creating user %s under hostname %s', req.body.username, req.body.hostname);
   if (!req.body.username || !req.body.hostname || !req.body.description) {

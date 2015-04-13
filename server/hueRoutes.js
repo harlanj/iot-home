@@ -2,6 +2,7 @@ var debug = require('debug')('iot-home:server:hue');
 var HueServer = {};
 
 var HueRoutes = function(server, middleware) {
+  server.get('/hue/bridges', middleware.findBridge);
   server.get('/hue/lights', middleware.findAllLights);
   server.get('/hue/light/:light', middleware.getState);
   server.get('/hue/light/:light/on', middleware.on);

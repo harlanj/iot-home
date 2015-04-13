@@ -64,13 +64,19 @@ HueController.user.newUser = function (hostname, username, description, callback
 HueController.user.deleteUser = function (username, callback) {
   debug('user:deleteUser');
   if (HueController.checkInit(callback)) {
-    console.log(hue);
     HueController.hue.unregisterUser(username, function (err, user) {
-      console.log(arguemnts);
       if (err) return callback({ error: err });
       callback(err, user);
     });
   }
+};
+
+HueController.light.findBridge = function(callback) {
+  debug('light:findBridge');
+  HueController.hue.nupnpSearch(function(err, bridges) {
+    if (err) return callback({ error: err });
+    callback(err, bridges);
+  });
 };
 
 HueController.light.displayConfiguration = function (callback) {
