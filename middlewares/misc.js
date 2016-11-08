@@ -1,29 +1,31 @@
-var debug = require('debug')('iot-home:middlewares:misc');
-var helpers = require('./../helpers/helpers');
-var Miscellaneous = {};
-debug('init');
+const Util = require('util')
+const Debug = require('debug')('iot-home:middlewares:misc')
 
-var Misc = function(server) {
-  if (server) {
-    require('./../server/miscRoutes').init(server, Misc);
-  } else {
-    throw new Error('SERVER_NOT_INITIALIZED');
-  }
-};
+const Helpers = require('./../helpers/helpers')
 
-Miscellaneous.init = function(server) {
-  return new Misc(server);
-};
+var Miscellaneous = {}
 
-Misc.index = function(req, res, next) {
-  debug('Index');
-  return res.send('Hello');
-};
+Debug('init')
 
-Misc.miscRoute = function(req, res, next) {
-  debug('miscRoute');
-  var error = util.format('%s not found', req.url);
-  return helpers.sendFailureResponse(res, error);
-};
+function Misc (server) {
+  if (server) require('./../server/miscRoutes').init(server, Misc)
+  else throw new Error('SERVER_NOT_INITIALIZED')
+}
 
-module.exports = Miscellaneous;
+Miscellaneous.init = (server) => {
+  return new Misc(server)
+}
+
+Misc.index = (req, res, next) => {
+  Debug('Index')
+  return res.send('Hello')
+}
+
+Misc.miscRoute = (req, res, next) => {
+  let error = Util.format('%s not found', req.url)
+
+  Debug('miscRoute')
+  return Helpers.sendFailureResponse(res, error)
+}
+
+module.exports = Miscellaneous

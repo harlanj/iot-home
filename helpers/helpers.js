@@ -1,36 +1,29 @@
-var debug = require('debug')('iot-home:helpers:helpers');
-var restify = require('restify');
-var helpers = {};
+var restify = require('restify')
 
-debug('init');
-
-helpers.isValid = function(context, type) {
+exports.isValid = (context, type) => {
   // Going to replace this with sinon stub testing at some point
+  if (typeof context === type) return true
+  else return false
+}
 
-  return typeof context === type ? true : false;
-};
-
-helpers.sendFailureResponse = function(res, next, statusCode, error) {
+exports.sendFailureResponse = (res, next, statusCode, error) => {
   if (typeof statusCode === 'number') {
     res.send(statusCode, {
       code: statusCode,
       success: false,
       error: error
-    });
-    next();
-  } else {
-    next(new restify.BadRequestError(error));
-  }
-};
+    })
+    next()
+  } else next(new restify.BadRequestError(error))
+}
 
-helpers.sendSuccessResponse = function(res, next, statusCode, result) {
-  statusCode = statusCode || 200;
+exports.sendSuccessResponse = (res, next, statusCode, result) => {
+  statusCode = statusCode || 200
   res.send(statusCode, {
     code: statusCode,
     success: true,
     result: result
-  });
-  next();
-};
+  })
 
-module.exports = helpers;
+  next()
+}

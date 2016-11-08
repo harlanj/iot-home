@@ -1,21 +1,22 @@
-var debug      = require('debug')('iot-home:iot-home');
-var util       = require('util');
-process.config = require('./config');
-var restify    = require('restify');
-var server     = restify.createServer({
+const Restify = require('restify')
+const Debug = require('debug')('iot-home:iot-home')
+
+const Config = require('./config')
+
+const Server = Restify.createServer({
   name: require('./package').name,
   version: require('./package').version
-});
+})
 
-server.use(restify.CORS());
-server.use(restify.acceptParser(server.acceptable));
-server.use(restify.queryParser());
-server.use(restify.bodyParser());
+Debug('init')
 
-require('./middlewares/middlewares').init(server, process.config.HUE_BRIDGE_HOST, process.config.HUE_BRIDGE_USERNAME);
+Server.use(Restify.CORS())
+Server.use(Restify.acceptParser(Server.acceptable))
+Server.use(Restify.queryParser())
+Server.use(Restify.bodyParser())
 
-debug('init');
+require('./middlewares/middlewares').init(Server, Config.HUE_BRIDGE_HOST, Config.HUE_BRIDGE_USERNAME)
 
-server.listen(process.env.PORT || 8015, function() {
-  debug('%s API listening on port %s', server.name, process.env.PORT || 8015);
-});
+Server.listen(process.env.PORT || 8015, () => {
+  Debug('%s API listening on port %s', Server.name, process.env.PORT || 8015)
+})
