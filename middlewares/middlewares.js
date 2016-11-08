@@ -1,19 +1,20 @@
-var debug = require('debug')('iot-home:middlewares:middlewares');
-var Middlewares = {};
+const Debug = require('debug')('iot-home:middlewares:middlewares')
 
-Middlewares.init = function(app, host, username) {
-  app.use(function(req, res, next) {
-    debug('***** ' + req.method, req.url + ' *****');
-    next();
-  });
+var Middlewares = {}
 
-  Middlewares.hueLights = require('./hueLight').init(app, host, username);
-  Middlewares.misc = require('./misc').init(app);
+Middlewares.init = (app, host, username) => {
+  app.use((req, res, next) => {
+    Debug('***** ' + req.method, req.url + ' *****')
+    next()
+  })
 
-  app.get('/', function(req, res, next) {
-    res.send('Hello');
-    next();
-  });
-};
+  Middlewares.hueLights = require('./hueLight').init(app, host, username)
+  Middlewares.misc = require('./misc').init(app)
 
-module.exports = Middlewares;
+  app.get('/', (req, res, next) => {
+    res.send('Hello')
+    next()
+  })
+}
+
+module.exports = Middlewares

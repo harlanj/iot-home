@@ -1,249 +1,257 @@
-var debug = require('debug')('iot-home:middlewares:hueLight');
-var hueLightsController = require('./../controllers/hueLight');
-var helpers = require('./../helpers/helpers');
-var HueLights = {};
-debug('init');
+const Debug = require('debug')('iot-home:middlewares:hueLight')
+const hueLightsController = require('./../controllers/hueLight')
+const helpers = require('./../helpers/helpers')
 
-var Hue = function(server, host, username) {
-  hueLightsController.init(host, username);
+var HueLights = {}
 
-  if (server) {
-    require('./../server/hueRoutes').init(server, Hue);
-  } else {
-    throw new Error('SERVER_NOT_INITIALIZED');
-  }
-};
+Debug('init')
 
-HueLights.init = function(server, host, username) {
-  return new Hue(server, host, username);
-};
+function Hue (server, host, username) {
+  hueLightsController.init(host, username)
 
-Hue.findBridge = function(req, res, next) {
-  debug('findBridge');
-  hueLightsController.light.findBridge(function(err, bridges) {
+  if (server) require('./../server/hueRoutes').init(server, Hue)
+  else throw new Error('SERVER_NOT_INITIALIZED')
+}
+
+HueLights.init = (server, host, username) => {
+  return new Hue(server, host, username)
+}
+
+Hue.findBridge = (req, res, next) => {
+  Debug('findBridge')
+
+  hueLightsController.light.findBridge((err, bridges) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Find bridges success');
+    Debug('Find bridges success')
     res.send(200, {
       code: 200,
       success: true,
       bridges: bridges
-    });
-  });
-};
+    })
+  })
+}
 
-Hue.newUser = function(req, res, next) {
-  debug('Creating user %s under hostname %s', req.body.username, req.body.hostname);
+Hue.newUser = (req, res, next) => {
+  Debug('Creating user %s under hostname %s', req.body.username, req.body.hostname)
+
   if (!req.body.username || !req.body.hostname || !req.body.description) {
-    debug('Error: All params not provided');
-    return helpers.sendFailureResponse(res, next, null, 'All params not provided');
+    Debug('Error: All params not provided')
+    return helpers.sendFailureResponse(res, next, null, 'All params not provided')
   }
 
-  hueLightsController.user.newUser(req.body.hostname, req.body.username, req.body.description, function(err, user) {
+  hueLightsController.user.newUser(req.body.hostname, req.body.username, req.body.description, function (err, user) {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Create user %s success', user);
+    Debug('Create user %s success', user)
     res.send(200, {
       code: 200,
       success: true,
       user: user
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.deleteUser = function (req, res, next) {
-  debug('Deleting user %s', req.body.username);
+Hue.deleteUser = (req, res, next) => {
+  Debug('Deleting user %s', req.body.username)
+
   if (!req.body.username) {
-    debug('Error: username not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Username not provided');
+    Debug('Error: username not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Username not provided')
   }
 
-  hueLightsController.user.deleteUser(req.body.username, function(err, user) {
+  hueLightsController.user.deleteUser(req.body.username, (err, user) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('User %s deleted', req.body.username);
+    Debug('User %s deleted', req.body.username)
     res.send(200, {
       code: 200,
       success: true,
       user: user
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.getAllUsers = function(req, res, next) {
-  debug('Get all users');
-  hueLightsController.user.findUsers(function(err, users) {
+Hue.getAllUsers = (req, res, next) => {
+  Debug('Get all users')
+  hueLightsController.user.findUsers((err, users) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Get all users success');
+    Debug('Get all users success')
     res.send(200, {
       code: 200,
       success: true,
       users: users
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.getUser = function (req, res, next) {
-  debug('Get User %s', req.params.username);
+Hue.getUser = (req, res, next) => {
+  Debug('Get User %s', req.params.username)
+
   if (!req.params.username) {
-    debug('Error: Username not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Username not provided');
+    Debug('Error: Username not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Username not provided')
   }
-  hueLightsController.user.findUser(req.params.username, function (err, user) {
+
+  hueLightsController.user.findUser(req.params.username, (err, user) => {
     if (err) {
-      console.log(err);
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Get user %s success', user.username);
+    Debug('Get user %s success', user.username)
     res.send(200, {
       code: 200,
       success: true,
       user: user
-    });
-  });
+    })
+  })
+}
 
-};
+Hue.displayConfiguration = (req, res, next) => {
+  Debug('Getting hue hub configuration')
 
-Hue.displayConfiguration = function(req, res, next) {
-  debug('Getting hue hub configuration');
-  hueLightsController.light.displayConfiguration(function (err, config) {
+  hueLightsController.light.displayConfiguration((err, config) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Get hue hub configuration success');
+    Debug('Get hue hub configuration success')
     res.send(200, {
       code: 200,
       success: true,
       config: config
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.findAllLights = function (req, res, next) {
-  debug('Getting all lights on hub');
-  hueLightsController.light.findAllLights(function (err, lights) {
+Hue.findAllLights = (req, res, next) => {
+  Debug('Getting all lights on hub')
+
+  hueLightsController.light.findAllLights((err, lights) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Get hue lights success');
+    Debug('Get hue lights success')
     res.send(200, {
       code: 200,
       success: true,
       lights: lights
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.on = function(req, res, next) {
-  debug('Turning on light %s', req.params.light);
+Hue.on = (req, res, next) => {
+  Debug('Turning on light %s', req.params.light)
+
   if (!req.params.light) {
-    debug('Error: Light not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Light not provided');
+    Debug('Error: Light not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Light not provided')
   }
 
-  hueLightsController.light.on(req.params.light, function(err, lights) {
+  hueLightsController.light.on(req.params.light, (err, lights) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Light %s turned on', req.params.light);
+    Debug('Light %s turned on', req.params.light)
     res.send(200, {
       code: 200,
       success: true
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.off = function(req, res, next) {
-  debug('Turning off light %s', req.params.light);
+Hue.off = (req, res, next) => {
+  Debug('Turning off light %s', req.params.light)
+
   if (!req.params.light) {
-    debug('Error: Light not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Light not provided');
+    Debug('Error: Light not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Light not provided')
   }
 
-  hueLightsController.light.off(req.params.light, function(err, lights) {
+  hueLightsController.light.off(req.params.light, (err, lights) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Light %s turned off', req.params.light);
+    Debug('Light %s turned off', req.params.light)
     res.send(200, {
       code: 200,
       success: true
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.getState = function (req, res, next) {
-  debug('Get light %s state', req.params.light);
+Hue.getState = (req, res, next) => {
+  Debug('Get light %s state', req.params.light)
+
   if (!req.params.light) {
-    debug('Error: Light not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Light not provided');
+    Debug('Error: Light not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Light not provided')
   }
 
-  hueLightsController.light.getState(req.params.light, function (err, light) {
+  hueLightsController.light.getState(req.params.light, (err, light) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Get light %s state success', req.params.light);
+    Debug('Get light %s state success', req.params.light)
     res.send(200, {
       code: 200,
       success: true,
       light: light
-    });
-    next();
-  });
-};
+    })
+    next()
+  })
+}
 
-Hue.setHue = function (req, res, next) {
-  debug('Set hue for light %s', req.params.light);
+Hue.setHue = (req, res, next) => {
+  Debug('Set hue for light %s', req.params.light)
+
   if (!req.params.light) {
-    debug('Error: Light not provided');
-    return helpers.sendFailureResponse(res, next, null, 'Light not provided');
+    Debug('Error: Light not provided')
+    return helpers.sendFailureResponse(res, next, null, 'Light not provided')
   }
 
-  hueLightsController.light.setHue(req.params.light, req.body.brightness, function (err, light) {
+  hueLightsController.light.setHue(req.params.light, req.body.brightness, (err, light) => {
     if (err) {
-      debug('Error: %s', err.error.message);
-      return helpers.sendFailureResponse(res, next, null, err.error.toString());
+      Debug('Error: %s', err.error.message)
+      return helpers.sendFailureResponse(res, next, null, err.error.toString())
     }
 
-    debug('Set hue for light %s success', req.params.light);
+    Debug('Set hue for light %s success', req.params.light)
     res.send(200, {
       code: 200,
       success: true
-    });
-  });
-};
+    })
+  })
+}
 
-module.exports = HueLights;
+module.exports = HueLights

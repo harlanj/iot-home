@@ -5,6 +5,7 @@
   "mod-project-name": "iot-home",
   "main": "iot-home.js",
   "scripts": {
+    "lint": "standard",
     "start": "DEBUG=iot-home:* runjs iot-home.js"
   },
   "keywords": [
@@ -18,5 +19,8 @@
     "debug": "~2.1.2",
     "node-hue-api": "~1.0.5",
     "restify": "~2.8.5"
+  },
+  "devDependencies": {
+    "standard": "8.5.0"
   }
 }

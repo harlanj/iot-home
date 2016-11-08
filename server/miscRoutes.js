@@ -1,13 +1,15 @@
-var debug = require('debug')('iot-home:server:misc');
-var MiscServer = {};
+const Debug = require('debug')('iot-home:server:misc')
 
-var MiscRoutes = function(server, middleware) {
-  server.get('/', middleware.index);
-};
+var MiscServer = {}
 
-MiscServer.init = function(API, middleware) {
-  debug('Initializing Miscellaneous API Routes');
-  return new MiscRoutes(API, middleware);
-};
+function MiscRoutes (server, middleware) {
+  server.get('/', middleware.index)
+}
 
-module.exports = MiscServer;
+MiscServer.init = (API, middleware) => {
+  Debug('Initializing Miscellaneous API Routes')
+
+  return new MiscRoutes(API, middleware)
+}
+
+module.exports = MiscServer
