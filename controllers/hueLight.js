@@ -85,7 +85,7 @@ HueController.user.deleteUser = (username, callback) => {
 HueController.light.findBridge = (callback) => {
   Debug('light:findBridge')
 
-  HueController.hue.nupnpSearch((err, bridges) => {
+  Hue.nupnpSearch((err, bridges) => {
     if (err) return callback({ error: err })
     callback(err, bridges)
   })
