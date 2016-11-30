@@ -22,7 +22,7 @@ Misc.index = (req, res, next) => {
 }
 
 Misc.miscRoute = (req, res, next) => {
-  let error = Util.format('%s not found', req.url)
+  var error = Util.format('%s not found', req.url)
 
   Debug('miscRoute')
   return Helpers.sendFailureResponse(res, error)
