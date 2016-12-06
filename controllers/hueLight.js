@@ -2,6 +2,8 @@ const Debug = require('debug')('iot-home:controllers:hueLight')
 const Hue = require('node-hue-api')
 const HueController = {}
 
+var Api, LightState
+
 HueController.user = {}
 HueController.light = {}
 
@@ -9,16 +11,14 @@ Debug('init')
 
 HueController.init = (host, user) => {
   Debug('Initializing Hue for %s %s', host, user)
-  this.hue = Hue
-  this._hueApi = Hue.HueApi
-  this._api = new Hue.HueApi(host, user)
-  this._state = Hue.lightState
+  Api = new Hue.HueApi(host, user)
+  LightState = Hue.lightState
 
   return this
 }
 
 HueController.checkInit = (callback) => {
-  if (!this._api) {
+  if (!Api) {
     callback({ error: 'HueController API not initialized' })
     return false
   }
@@ -30,7 +30,7 @@ HueController.user.findUsers = (callback) => {
   Debug('user:findUsers')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.registeredUsers((err, users) => {
+    Api.registeredUsers((err, users) => {
       if (err) return callback({ error: err })
       callback(err, users)
     })
@@ -60,10 +60,10 @@ HueController.user.newUser = (hostname, username, description, callback) => {
   Debug('user:newUser')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.pressLinkButton((err, result) => {
+    Api.pressLinkButton((err, result) => {
       if (err) return callback({ error: 'Failed to Initialize Link Button' })
 
-      HueController._api.registerUser(hostname, username, description, (err, user) => {
+      Api.registerUser(hostname, username, description, (err, user) => {
         if (err) return callback({ error: err })
         callback(err, user)
       })
@@ -75,7 +75,7 @@ HueController.user.deleteUser = (username, callback) => {
   Debug('user:deleteUser')
 
   if (HueController.checkInit(callback)) {
-    HueController.hue.unregisterUser(username, (err, user) => {
+    Hue.unregisterUser(username, (err, user) => {
       if (err) return callback({ error: err })
       callback(err, user)
     })
@@ -85,7 +85,7 @@ HueController.user.deleteUser = (username, callback) => {
 HueController.light.findBridge = (callback) => {
   Debug('light:findBridge')
 
-  HueController.hue.nupnpSearch((err, bridges) => {
+  Hue.nupnpSearch((err, bridges) => {
     if (err) return callback({ error: err })
     callback(err, bridges)
   })
@@ -95,7 +95,7 @@ HueController.light.displayConfiguration = (callback) => {
   Debug('light:displayConfiguration')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.config((err, configuration) => {
+    Api.config((err, configuration) => {
       if (err) return callback({ error: err })
       callback(err, configuration)
     })
@@ -106,7 +106,7 @@ HueController.light.findAllLights = (callback) => {
   Debug('light:findAllLights')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.lights((err, lights) => {
+    Api.lights((err, lights) => {
       if (err) return callback({ error: err })
       callback(err, lights)
     })
@@ -129,7 +129,7 @@ HueController.light._on = (light, status, callback) => {
 
   if (status) return callback({ error: 'Light is already on' })
 
-  HueController._api.setLightState(light, HueController._state.create().on(), (err, lights) => {
+  Api.setLightState(light, LightState.create().on(), (err, lights) => {
     if (err) return callback({ error: err })
     callback(err, lights)
   })
@@ -151,7 +151,7 @@ HueController.light._off = (light, status, callback) => {
 
   if (!status) return callback({ error: 'Light is already off' })
 
-  HueController._api.setLightState(light, HueController._state.create().off(), (err, lights) => {
+  Api.setLightState(light, LightState.create().off(), (err, lights) => {
     if (err) return callback({ error: err })
     callback(err, lights)
   })
@@ -181,7 +181,7 @@ HueController.light.setHue = (light, brightness, callback) => {
 HueController.light._setHue = (light, currentBrightness, brightness, callback) => {
   Debug('light:_setHue')
 
-  HueController._api.setLightState(light, { bri: brightness }, (err, response) => {
+  Api.setLightState(light, { bri: brightness }, (err, response) => {
     if (err) return callback({ error: err })
     callback(err, response)
   })
@@ -191,7 +191,7 @@ HueController.light.createLightGroup = (groupName, lights, callback) => {
   Debug('light:createLightGroup')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.createGroup(groupName, lights, (err, groupId) => {
+    Api.createGroup(groupName, lights, (err, groupId) => {
       if (err) return callback({ error: err })
       callback(err, groupId)
     })
@@ -202,7 +202,7 @@ HueController.light.getState = (light, callback) => {
   Debug('light:getState')
 
   if (HueController.checkInit(callback)) {
-    HueController._api.lightStatus(light, (err, light) => {
+    Api.lightStatus(light, (err, light) => {
       if (err) return callback({ error: err })
       callback(err, light)
     })
