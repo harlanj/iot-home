@@ -1,6 +1,6 @@
 {
   "name": "iot-home",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Smart Lights wrapper for API calls",
   "mod-project-name": "iot-home",
   "main": "iot-home.js",
